@@ -1,0 +1,23 @@
+{
+	"geode": "5.0.1",
+	"gd": {
+		"win": "2.2081",
+		"android": "2.2081",
+		"mac": "2.2081",
+		"ios": "2.2081"
+	},
+	"id": "polik.translate-comments",
+	"name": "Translate Comments",
+	"version": "v1.0.0",
+	"developer": "Polik",
+	"tags": ["enhancement", "interface", "online", "utility"],
+	"description": "Translates comments using google translate!",
+	"dependencies": {
+		"geode.node-ids": ">=v1.22.0"
+	},
+	"resources": {
+		"sprites": [
+			"resources/translate.png"
+		]
+	}
+}
