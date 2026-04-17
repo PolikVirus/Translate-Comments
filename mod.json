@@ -1,5 +1,5 @@
 {
-	"geode": "5.0.1",
+	"geode": "5.4.1",
 	"gd": {
 		"win": "2.2081",
 		"android": "2.2081",
@@ -12,12 +12,19 @@
 	"developer": "Polik",
 	"tags": ["enhancement", "interface", "online", "utility"],
 	"description": "Translates comments using google translate!",
-	"dependencies": {
-		"geode.node-ids": ">=v1.22.0"
-	},
 	"resources": {
 		"sprites": [
 			"resources/translate.png"
 		]
+	},
+	"settings": {
+		"target-language": {
+			"type": "string",
+			"name": "Target Language",
+			"default": "English",
+			"one-of": ["English", "Spanish", "German", "French", "Swedish", "Latvian", "Polish"]
+		}
 	}
+	
+
 }
