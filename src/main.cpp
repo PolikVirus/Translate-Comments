@@ -2,7 +2,7 @@
 #include <Geode/Bindings.hpp>
 #include <Geode/modify/CommentCell.hpp>
 #include <Geode/utils/web.hpp>
-
+#include <limits>
 using namespace geode::prelude;
 
 /*
@@ -114,19 +114,32 @@ class $modify(Translatehook, CommentCell) {
             menu_selector(Translatehook::onTranslate)
         );
 
-        // for some reason comment cell doesnt have a layout so i had to position it manually
         translatebtn->setID("translate-button");
-        if (m_compactMode == true) {
-            // translatebtn->setID("translate-button");
-            translatebtn->setPosition(4, -152);
-            btnsprite->setScale(0.3f);
-        }
-        else {
-            // translatebtn->setID("translate-button");
-            translatebtn->setPosition(-24, -145);
-            btnsprite->setScale(0.4f);
-        }
+
         
+        // this is better that how i did it before, but it still causes overlapping with some mods
+        CCMenuItemSpriteExtra* leftmostButton = nullptr;
+        float leftmostX = std::numeric_limits<float>::max();
+
+        for (int i = 0; i < menu->getChildrenCount(); i++) {
+            auto child = static_cast<CCNode*>(menu->getChildren()->objectAtIndex(i));
+            if (!child) continue;
+
+            auto button = typeinfo_cast<CCMenuItemSpriteExtra*>(child);
+            if (!button) continue;
+
+            float x = button->getPositionX();
+            if (x < leftmostX) {
+                leftmostX = x;
+                leftmostButton = button;
+            }
+        }
+
+        if (leftmostButton) {
+            auto pos = leftmostButton->getPosition();
+            translatebtn->setPosition({ pos.x - 30.f, pos.y });
+            btnsprite->setScale(0.8f);
+        }
         
         menu->addChild(translatebtn);
 
