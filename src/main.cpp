@@ -12,56 +12,66 @@ using namespace geode::prelude;
 std::string diacritic_removal(std::string text) {
     std::vector<std::pair<std::string, std::string>> repl = {
         // a
-        {"à", "a"}, {"á", "a"}, {"â", "a"}, {"ã", "a"}, {"ä", "a"}, {"å", "a"}, {"ā", "a"},
-        {"À", "A"}, {"Á", "A"}, {"Â", "A"}, {"Ã", "A"}, {"Ä", "A"}, {"Å", "A"}, {"Ā", "A"},
+        {"à", "a"}, {"á", "a"}, {"â", "a"}, {"ã", "a"}, {"ä", "a"}, {"å", "a"},
+        {"ā", "a"}, {"ą", "a"},
+        {"À", "A"}, {"Á", "A"}, {"Â", "A"}, {"Ã", "A"}, {"Ä", "A"}, {"Å", "A"},
+        {"Ā", "A"}, {"Ą", "A"},
 
         // c
-        {"ç", "c"}, {"č", "c"},
-        {"Ç", "C"}, {"Č", "C"},
+        {"ç", "c"}, {"č", "c"}, {"ć", "c"},
+        {"Ç", "C"}, {"Č", "C"}, {"Ć", "C"},
 
         // e
-        {"è", "e"}, {"é", "e"}, {"ê", "e"}, {"ë", "e"}, {"ē", "e"},
-        {"È", "E"}, {"É", "E"}, {"Ê", "E"}, {"Ë", "E"}, {"Ē", "E"},
+        {"è", "e"}, {"é", "e"}, {"ê", "e"}, {"ë", "e"},
+        {"ē", "e"}, {"ę", "e"}, {"ė", "e"},
+        {"È", "E"}, {"É", "E"}, {"Ê", "E"}, {"Ë", "E"},
+        {"Ē", "E"}, {"Ę", "E"}, {"Ė", "E"},
 
         // g
-        {"ģ", "g"},
-        {"Ģ", "G"},
+        {"ģ", "g"}, {"ğ", "g"},
+        {"Ģ", "G"}, {"Ğ", "G"},
 
         // i
-        {"ì", "i"}, {"í", "i"}, {"î", "i"}, {"ï", "i"}, {"ī", "i"},
-        {"Ì", "I"}, {"Í", "I"}, {"Î", "I"}, {"Ï", "I"}, {"Ī", "I"},
+        {"ì", "i"}, {"í", "i"}, {"î", "i"}, {"ï", "i"},
+        {"ī", "i"}, {"į", "i"}, {"ı", "i"},
+        {"Ì", "I"}, {"Í", "I"}, {"Î", "I"}, {"Ï", "I"},
+        {"Ī", "I"}, {"Į", "I"}, {"İ", "I"},
 
         // k
         {"ķ", "k"},
         {"Ķ", "K"},
 
         // l
-        {"ļ", "l"},
-        {"Ļ", "L"},
+        {"ļ", "l"}, {"ł", "l"},
+        {"Ļ", "L"}, {"Ł", "L"},
 
         // n
-        {"ñ", "n"}, {"ņ", "n"},
-        {"Ñ", "N"}, {"Ņ", "N"},
+        {"ñ", "n"}, {"ņ", "n"}, {"ń", "n"},
+        {"Ñ", "N"}, {"Ņ", "N"}, {"Ń", "N"},
 
         // o
         {"ò", "o"}, {"ó", "o"}, {"ô", "o"}, {"õ", "o"}, {"ö", "o"}, {"ø", "o"},
+        {"ō", "o"}, {"õ", "o"}, {"ó", "o"},
         {"Ò", "O"}, {"Ó", "O"}, {"Ô", "O"}, {"Õ", "O"}, {"Ö", "O"}, {"Ø", "O"},
+        {"Ō", "O"},
 
         // s
-        {"ß", "ss"}, {"š", "s"},
-        {"Š", "S"},
+        {"ß", "ss"}, {"š", "s"}, {"ś", "s"},
+        {"Š", "S"}, {"Ś", "S"},
 
         // u
-        {"ù", "u"}, {"ú", "u"}, {"û", "u"}, {"ü", "u"}, {"ū", "u"},
-        {"Ù", "U"}, {"Ú", "U"}, {"Û", "U"}, {"Ü", "U"}, {"Ū", "U"},
+        {"ù", "u"}, {"ú", "u"}, {"û", "u"}, {"ü", "u"},
+        {"ū", "u"}, {"ų", "u"},
+        {"Ù", "U"}, {"Ú", "U"}, {"Û", "U"}, {"Ü", "U"},
+        {"Ū", "U"}, {"Ų", "U"},
 
         // y
         {"ÿ", "y"},
         {"Ÿ", "Y"},
 
         // z
-        {"ž", "z"},
-        {"Ž", "Z"}
+        {"ž", "z"}, {"ź", "z"}, {"ż", "z"},
+        {"Ž", "Z"}, {"Ź", "Z"}, {"Ż", "Z"}
     };
 
     // replace
@@ -132,6 +142,8 @@ class $modify(Translatehook, CommentCell) {
         auto targetlang = Mod::get()->getSettingValue<std::string>("target-language");
         std::string language;
 
+
+        // there is 100% a better way to do this, but it works
         if (targetlang == "English") {
             language = std::string("en");
         }
@@ -152,6 +164,36 @@ class $modify(Translatehook, CommentCell) {
         }
         else if (targetlang == "Polish") {
             language = std::string("pl");
+        }
+        else if (targetlang == "Lithuanian") {
+            language = std::string("lt");
+        }
+        else if (targetlang == "Estonian") {
+            language = std::string("et");
+        }
+        else if (targetlang == "Portuguese") {
+            language = std::string("pt");
+        }
+        else if (targetlang == "Italian") {
+            language = std::string("it");
+        }
+        else if (targetlang == "Dutch") {
+            language = std::string("nl");
+        }
+        else if (targetlang == "Turkish") {
+            language = std::string("tr");
+        }
+        else if (targetlang == "Romanian") {
+            language = std::string("ro");
+        }
+        else if (targetlang == "Finnish") {
+            language = std::string("fi");
+        }
+        else if (targetlang == "Danish") {
+            language = std::string("da");
+        }
+        else if (targetlang == "Norwegian") {
+            language = std::string("no");
         }
         else {
             language = "en";
