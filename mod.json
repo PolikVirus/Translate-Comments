@@ -8,10 +8,11 @@
 	},
 	"id": "polik.translate-comments",
 	"name": "Translate Comments",
-	"version": "v1.0.0",
+	"version": "v1.0.1",
 	"developer": "Polik",
 	"tags": ["enhancement", "interface", "online", "utility"],
 	"description": "Translates comments using google translate!",
+	"links": {"source": "https://github.com/PolikVirus/Translate-Comments"},
 	"resources": {
 		"sprites": [
 			"resources/translate.png"
