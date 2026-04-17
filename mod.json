@@ -22,7 +22,7 @@
 			"type": "string",
 			"name": "Target Language",
 			"default": "English",
-			"one-of": ["English", "Spanish", "German", "French", "Swedish", "Latvian", "Polish"]
+			"one-of": ["English", "Spanish", "German", "French", "Swedish", "Latvian", "Polish", "Lithuanian", "Estonian", "Portuguese", "Italian", "Dutch", "Turkish", "Romanian", "Finnish", "Danish", "Norwegian"]
 		}
 	}
 	
