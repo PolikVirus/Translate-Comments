@@ -351,6 +351,14 @@ class $modify(Translatehook, CommentCell) {
                 auto textNode = typeinfo_cast<TextArea*>(m_mainLayer->getChildByID("comment-text-area"));
                 if (textNode) {
                     textNode->setString(translated.c_str());
+                    // log::info("area");
+                }
+                else {
+                    auto textNodecompact = typeinfo_cast<CCLabelBMFont*>(m_mainLayer->getChildByID("comment-text-label"));
+                    if (textNodecompact) {
+                        textNodecompact->setString(translated.c_str());
+                        // log::info("label");
+                    }
                 }
             }
         );
