@@ -8,7 +8,7 @@
 	},
 	"id": "polik.translate-comments",
 	"name": "Translate Comments",
-	"version": "v1.0.2",
+	"version": "v1.0.3",
 	"developer": "Polik",
 	"tags": ["enhancement", "interface", "online", "utility"],
 	"description": "Translates comments using google translate!",
