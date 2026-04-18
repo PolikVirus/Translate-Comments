@@ -103,7 +103,7 @@ class $modify(Translatehook, CommentCell) {
 
         auto menu = typeinfo_cast<CCMenu*>(node);
         if (!menu) return;
-        if (menu->getChildByID("translate-button")) return;
+        if (menu->getChildByID("translate-button"_spr)) return;
         
 
     
@@ -114,9 +114,9 @@ class $modify(Translatehook, CommentCell) {
             menu_selector(Translatehook::onTranslate)
         );
 
-        translatebtn->setID("translate-button");
+        translatebtn->setID("translate-button"_spr);
 
-        
+
         // this is better that how i did it before, but it still causes overlapping with some mods
         CCMenuItemSpriteExtra* leftmostButton = nullptr;
         float leftmostX = std::numeric_limits<float>::max();
@@ -223,25 +223,135 @@ class $modify(Translatehook, CommentCell) {
         m_fields->m_listener.spawn(
             req.get("https://translate.googleapis.com/translate_a/single"),
             [this](web::WebResponse res) {
-                log::info("status: {}", res.code());
 
+                // error handlers
+                
+                // this makes an alert for each error for the user
+                // i included only the common ones
+                if (res.code() != 200) {
+                    switch (res.code()) {
+                        case -7:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Couldn't connect to server",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        case -28:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Timed out",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        case -6:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Couldn't resolve host",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        case 400:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Bad request",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        case 401:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Unauthorized",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        case 429:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Rate limit",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        case 500:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Server-side issues",
+                                "Ok"
+                            )->show();
+                            break;
+                        case 503:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Server-side issues",
+                                "Ok"
+                            )->show();
+                            break;
+
+                        default:
+                            FLAlertLayer::create(
+                                "Translate comments",
+                                "Error: Request failed",
+                                "Ok"
+                            )->show();
+                            break;
+                    }
+                    return;
+                }
+                // check translation body
                 auto body = res.string().unwrapOr("Uh oh!");
-                log::info("{}", body);
+                if (body.empty()) {
+                    log::warn("translation response body was empty");
+                    return;
+                }
 
+                // check parse
                 auto parsed = matjson::parse(body);
                 if (!parsed) {
                     log::info("failed to parse response");
                     return;
                 }
-                
-                auto translated = (*parsed)[0][0][0].asString().unwrapOr("");
+                // check if array
+                auto const& root = *parsed;
+                if (!root.isArray()) {
+                    log::warn("translation response root was not an array");
+                    return;
+                }
+                auto sentences = root[0];
+                if (!sentences.isArray() || sentences.size() == 0) {
+                    log::warn("translation response missing sentence array");
+                    return;
+                }
+
+                auto firstSentence = sentences[0];
+                if (!firstSentence.isArray() || firstSentence.size() == 0) {
+                    log::warn("translation response missing first sentence entry: {}", body);
+                    return;
+                }
+                // check if string
+                auto translation = firstSentence[0];
+                if (!translation.isString()) {
+                    log::warn("translation is not a string");
+                    return;
+                }
+
+                auto translated = translation.asString().unwrapOr("");
                 // log::info(translated);
                 
                 translated = diacritic_removal(translated);
                 // set text
                 if (translated.empty()) return;
                 m_fields->m_comment->m_commentString = translated;
-                this->loadFromComment(m_fields->m_comment);
+
+                auto textNode = typeinfo_cast<TextArea*>(m_mainLayer->getChildByID("comment-text-area"));
+                if (textNode) {
+                    textNode->setString(translated.c_str());
+                }
             }
         );
 
